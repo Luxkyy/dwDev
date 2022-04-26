@@ -16,42 +16,67 @@ spawn(function()
     loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/JustEzpi/ROBLOX-Scripts/main/ROBLOX_AutoClicker"))()
 end)
 
+-- Go through players
 spawn(function()
-    rs.RenderStepped:Connect(function()
-	for i,v in pairs(game:GetService("Workspace").Thrown:GetChildren()) do
+    game:GetService("RunService").Stepped:connect(function()
+    	for _, player in pairs(game.Players:GetPlayers()) do
+    		if player ~= game.Players.LocalPlayer then
+    			local character = player.Character
+    			if character then
+    				local head = character:FindFirstChild("Head")
+    				local torso = character:FindFirstChild("Torso")
+    				if head then head.CanCollide = false end
+    				if torso then torso.CanCollide = false end
+    			end
+    		end
+    	end
+    end)
+end)
+
+---- Teleport to Players
+
+spawn(function()
+rs.RenderStepped:Connect(function()
+        for i,v in pairs(game.Players:GetPlayers()) do
+        if v ~= game.Players.LocalPlayer then
+            local character = v.Character
+			if character then
+			root.CFrame = character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+		for i,v in pairs(game:GetService("Workspace").Thrown:GetChildren()) do
         if v.Name == "Model" and v.InteractPrompt then
-        root.CFrame = v.Part.CFrame
-        wait()
-        fireproximityprompt(v.InteractPrompt)
+            root.CFrame = v.Part.CFrame
+            wait()
+            fireproximityprompt(v.InteractPrompt)
+        if plrgui:WaitForChild("ChoicePrompt") then
+        for i,v in pairs(plrgui.ChoicePrompt.ChoiceFrame.Options:GetChildren()) do
+        if v.ClassName == "TextButton" then
+        if v.BackgroundColor3 == Color3.fromRGB(204, 255, 243) then
+            items = v.Name
+            local ohString1 = items
+            game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("ChoicePrompt").Choice:FireServer(ohString1)
+            local ohTable1 = {["1"] = "Weapons",["2"] = items}
+            game:GetService("ReplicatedStorage").Requests.UpdateSlotData:FireServer(ohTable1)
+        else
+            wait(3)
+            game:GetService("Workspace").Thrown.Model:Destroy()
+            items = "Nothing"
+            local ohString1 = items
+            game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("ChoicePrompt").Choice:FireServer(ohString1)
+            local ohTable1 = {["1"] = "Weapons",["2"] = items}
+            game:GetService("ReplicatedStorage").Requests.UpdateSlotData:FireServer(ohTable1)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+			    end
             end
         end
     end)
 end)
 
-spawn(function()
-rs.RenderStepped:Connect(function()
-if plrgui:WaitForChild("ChoicePrompt") then
-    for i,v in pairs(plrgui.ChoicePrompt.ChoiceFrame.Options:GetChildren()) do
-    if v.ClassName == "TextButton" then
-    if v.BackgroundColor3 == Color3.fromRGB(204, 255, 243) then
-    items = v.Name
-    local ohString1 = items
-    game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("ChoicePrompt").Choice:FireServer(ohString1)
-    local ohTable1 = {["1"] = "Weapons",["2"] = items}
-    game:GetService("ReplicatedStorage").Requests.UpdateSlotData:FireServer(ohTable1)
-else
-    wait(3)
-    game:GetService("Workspace").Thrown.Model:Destroy()
-    items = "Nothing"
-    local ohString1 = items
-    game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("ChoicePrompt").Choice:FireServer(ohString1)
-    local ohTable1 = {["1"] = "Weapons",["2"] = items}
-    game:GetService("ReplicatedStorage").Requests.UpdateSlotData:FireServer(ohTable1)
-                    end
-                end
-            end
-        end
-    end)
-end)
+
+----
 
 
